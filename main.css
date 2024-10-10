@@ -1,0 +1,72 @@
+body{
+    height: 100vh;
+    background-image: url(/img/bg.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.game{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 30px;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.btn--start{
+    background-color: #199b3a;
+    padding: 10px 30px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.btn--start:hover{
+    background-color: #0c461a;
+}
+
+.game__found, .game__total{
+    margin-top: 10px;
+    color: #1d2920;
+    font-weight: 1000;
+}
+
+.game__field{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.stone {
+    width: 97px;
+    height: 97px;
+    transition: all .1s;
+}
+
+.stone:hover {
+    transform: scale(1.05);
+}
+
+/* дефолтное состояние заблокированности */
+.stone:disabled{
+    cursor: not-allowed;
+}
+
+.stone--pair:disabled{
+    cursor: not-allowed;
+    filter: grayscale(0);
+    opacity: .5;
+}
+
+
+.stone--hide{
+    filter: grayscale(1);
+}
