@@ -50,6 +50,29 @@ class Game {
 
     _setStateStartGameHandler(){
       this._setStateStartGame(!this._state.startGame);
+
+      if (this._state.startGame) {
+        this._setStateStonesStatus(data.map((elem) => {
+          return {
+            ...elem,
+           disabled: false,
+           hide: true,
+          } 
+         }).sort((a, b) => 0.5 - Math.random()));
+      }
+
+      // .sort((a, b) => 0.5 - Math.random())
+
+      if (!this._state.startGame) {
+        this._setStateStonesStatus(data.map((elem) => {
+          return {
+            ...elem,
+           disabled: true,
+           hide: false,
+          } 
+         }));
+      }
+
       this._render();
     }
 
