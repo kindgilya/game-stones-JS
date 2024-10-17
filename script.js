@@ -13,6 +13,7 @@ class Game {
     _state = {
       stonesStatus:[],
       startGame: false,
+      pair: [],
     }
 
     constructor({data, Stone, Button}){
@@ -36,16 +37,18 @@ class Game {
       this._state.startGame = status;
     }
 
+    _setStatePair(obj){
+      if (this._state.pair.length === 2) {
+      this._state.pair = [];
+      }
+
+      this._state.pair = [...this._state.pair, obj];
+    }
+
     _init(){
         this._element = createElement(this._getTemplate());
         this._subElements = this._getSubElements();
         this._render();
-    }
-
-    _generateStones(){
-      return this._state.stonesStatus.map((obj) => {
-        return new this._Stone(obj).element;
-      })
     }
 
     _setStateStartGameHandler(){
@@ -76,8 +79,29 @@ class Game {
       this._render();
     }
 
+    _setStatePairHandler(obj){
+      this._setStatePair(obj);
+      console.log(this._state.pair);
+    }
+
+    _isEqualPair(){
+      if (this._state.pair.length < 2) {
+        return false;
+      }
+      if (this._state.pair[0].color === this._state.pair[1].color) {
+        return true;
+      }
+      return false;
+    }
+
     _generateBtn() {
       return new this._Button({use:"start", text: this._state.startGame ? "finish game" : "start game"}, this._setStateStartGameHandler.bind(this)).element
+    }
+
+    _generateStones(){
+      return this._state.stonesStatus.map((obj) => {
+        return new this._Stone(obj, this._setStatePairHandler.bind(this)).element;
+      })
     }
 
     _render(){
@@ -114,19 +138,31 @@ class Stone {
     _element = null;
     _subElements = null;
 		
-    constructor({id, disabled, hide, img}){
+    constructor({id, color, disabled, hide, img},handler){
         this._id = id;
+        this._color = color;
         this._disabled = disabled;
         this._hide = hide;
-        // this._pair = pair;
         this._img = img;
+        this._handler = handler;
         this._init();
     }
 
     _init(){
         this._element = createElement(this._getTemplate());
         this._subElements = this._getSubElements();
+        this._addListeners();
     }
+
+    _addListeners(){
+      this._element.addEventListener("click", () => {
+        this._handler({
+          id: this._id,
+          color: this._color
+        })
+      })
+    }
+
 
     _getSubElements() {
       return Array.from(this._element.querySelectorAll("[data-element]")).reduce((acc, elem) => {
