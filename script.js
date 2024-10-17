@@ -81,8 +81,30 @@ class Game {
 
     _setStatePairHandler(obj){
       this._setStatePair(obj);
-      console.log(this._state.pair);
+      if (this._isEqualPair()) {
+        const idsStonesInPair = [this._state.pair[0].id, this._state.pair[1].id];
+
+        this._state.stonesStatus.map((el) => {
+          if (idsStonesInPair.includes(el.id)) {
+            // камень найден по id
+            el.disabled = true;
+            el.hide = false;
+            return el;
+          }
+          return el;
+        })
+      }
+      this._render();
     }
+
+    /* 
+    
+    ДЗ
+    - исправить баг (когда 2 раза кликаем на 1 камень, он думает что это пара)
+    - оживить total + found
+    - если все пары нашлись, игра переходит в статус начала игры (все должно сброситься)
+    
+    */
 
     _isEqualPair(){
       if (this._state.pair.length < 2) {
