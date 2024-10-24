@@ -80,7 +80,12 @@ class Game {
     }
 
     _setStatePairHandler(obj){
+      if (this._state.pair.length === 1 && this._state.pair[0].id === obj.id) {
+        return;
+      }
+      
       this._setStatePair(obj);
+      
       if (this._isEqualPair()) {
         const idsStonesInPair = [this._state.pair[0].id, this._state.pair[1].id];
 
