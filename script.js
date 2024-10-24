@@ -14,6 +14,7 @@ class Game {
       stonesStatus:[],
       startGame: false,
       pair: [],
+      foundParts: 0,
     }
 
     constructor({data, Stone, Button}){
@@ -37,6 +38,10 @@ class Game {
       this._state.startGame = status;
     }
 
+    _setStateFoundParts(num){
+      this._state.foundParts = num;
+    }
+
     _setStatePair(obj){
       if (this._state.pair.length === 2) {
       this._state.pair = [];
@@ -45,7 +50,7 @@ class Game {
       this._state.pair = [...this._state.pair, obj];
     }
 
-    _init(){
+    _init() {
         this._element = createElement(this._getTemplate());
         this._subElements = this._getSubElements();
         this._render();
@@ -74,6 +79,7 @@ class Game {
            hide: false,
           } 
          }));
+         this._setStateFoundParts(0);
       }
 
       this._render();
@@ -98,6 +104,7 @@ class Game {
           }
           return el;
         })
+        this._setStateFoundParts(this._state.foundParts + 1);
       }
       this._render();
     }
@@ -105,11 +112,27 @@ class Game {
     /* 
     
     ДЗ
-    - исправить баг (когда 2 раза кликаем на 1 камень, он думает что это пара)
+    - + исправить баг (когда 2 раза кликаем на 1 камень, он думает что это пара)
     - оживить total + found
     - если все пары нашлись, игра переходит в статус начала игры (все должно сброситься)
     
     */
+
+    _getTotalParts(){
+      const obj = this._state.stonesStatus.reduce((acc, el) => {
+        if (acc[el.color] === undefined) {
+          acc[el.color] = 1;
+        } else {
+          acc[el.color] += 1;
+        }
+        return acc;
+      }, {});
+      
+      return Object.values(obj).reduce((acc, el) => {
+        acc += Math.floor(el / 2);
+        return acc
+      }, 0);
+    }
 
     _isEqualPair(){
       if (this._state.pair.length < 2) {
@@ -136,6 +159,8 @@ class Game {
       this._subElements.btn.innerHTML = "";
       this._subElements.field.append(...this._generateStones());
       this._subElements.btn.append(this._generateBtn());
+      this._subElements.total.textContent = `Total parts: ${this._getTotalParts()}`;
+      this._subElements.found.textContent = `Found parts: ${this._state.foundParts}`;
     }
 
     _getSubElements() {
@@ -150,8 +175,8 @@ class Game {
 			_getTemplate(){
         return `<div class="game">
 				<div class="game__btn" data-element="btn"></div>
-                <span class="game__found">Found parts: 0</span>
-                <span class="game__total">Total parts: 0</span>
+                <span class="game__found" data-element="found">Found parts: 0</span>
+                <span class="game__total" data-element="total">Total parts: 0</span>
                 <div class="game__field" data-element="field"></div>
         </div>`
     }
