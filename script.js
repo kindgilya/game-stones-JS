@@ -85,7 +85,7 @@ class Game {
       this._render();
     }
 
-    _setStatePairHandler(obj){
+    _setStatePairHandler(obj) {
       if (this._state.pair.length === 1 && this._state.pair[0].id === obj.id) {
         return;
       }
@@ -105,18 +105,15 @@ class Game {
           return el;
         })
         this._setStateFoundParts(this._state.foundParts + 1);
+
+        if (this._getTotalParts() === this._state.foundParts) {
+          this._setStateStartGame(false);
+          this._setStateFoundParts(0);
+        }
       }
+
       this._render();
     }
-
-    /* 
-    
-    ДЗ
-    - + исправить баг (когда 2 раза кликаем на 1 камень, он думает что это пара)
-    - оживить total + found
-    - если все пары нашлись, игра переходит в статус начала игры (все должно сброситься)
-    
-    */
 
     _getTotalParts(){
       const obj = this._state.stonesStatus.reduce((acc, el) => {
