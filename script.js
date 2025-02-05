@@ -225,7 +225,7 @@ class Stone {
 
 	_getTemplate(){
         return `<button class="stone ${this._hide ? "stone--hide" : ""} ${this._pair ? "stone--pair" : ""}" ${this._disabled ? "disabled" : ""}>
-                <img class="stone__img" src="/img/${this._img}" alt="">
+                <img class="stone__img" src="./img/${this._img}" alt="">
                 </button>`
     }
 
